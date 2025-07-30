@@ -22,7 +22,8 @@ function Build-Manual {
     );
     $sourceFiles = @(
         "$PSScriptRoot/hello_world.cpp",
-        "$PSScriptRoot/example.cpp"
+        "$PSScriptRoot/example.cpp",
+        "$PSScriptRoot/move_me_out.cpp"
     );
     $outputFile = "$PSScriptRoot/build-manual/hello_world.exe";
 
