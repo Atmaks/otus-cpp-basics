@@ -1,17 +1,25 @@
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 int get_the_number();
+std::string read_name();
 int read_guess();
+
+constexpr auto maxInputSize = std::numeric_limits<std::streamsize>::max();
 
 int main(int argumentsCount, char **arguments)
 {
     int theNumber = get_the_number();
+    std::string name = read_name();
+
     int guess = -1;
+    int attempts = 0;
 
     while (true)
     {
         guess = read_guess();
+        attempts += 1;
 
         if (guess > theNumber)
         {
@@ -23,10 +31,12 @@ int main(int argumentsCount, char **arguments)
         }
         else
         {
-            std::cout << "You guessed right!" << std::endl;
+            std::cout << "You guessed right!";
             break;
         }
     }
+
+    std::cout << " Name: " << name << " Attempts: " << attempts << std::endl;
 }
 
 int get_the_number()
@@ -35,7 +45,44 @@ int get_the_number()
     return std::rand() % 100;
 }
 
-constexpr auto maxInputSize = std::numeric_limits<std::streamsize>::max();
+std::string read_name()
+{
+    std::string name;
+    const int maxLength = 20;
+
+    while (true)
+    {
+        std::cout << "Hi! Enter your name please:" << std::endl;
+
+        std::cin >> name;
+
+        if (std::cin.eof() || std::cin.bad())
+        {
+            std::cout << "Some weird shit, terminating..." << std::endl;
+            std::exit(1);
+        }
+
+        if (std::cin.fail())
+        {
+            std::cout << "Failed to read name. Let's try again." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(maxInputSize, '\n');
+            continue;
+        }
+
+        if (name.length() > maxLength)
+        {
+            std::cout << "No more than " << maxLength << " characters please!" << std::endl;
+            std::cin.ignore(maxInputSize, '\n');
+            continue;
+        }
+
+        break;
+    }
+
+    return name;
+}
+
 int read_guess()
 {
     int guess = -1;
