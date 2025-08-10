@@ -1,12 +1,14 @@
 # Примеры функций для сборки-запуска домашних заданий
 # Не используем Makefile, потому что страшно неудобный
 
+$executableName = "main.exe"
+
 function Build-Cmake {
     cmake -B "$PSScriptRoot/build-cmake" -S . && cmake --build "$PSScriptRoot/build-cmake"
 }
 
 function Run-Cmake {
-    & "$PSScriptRoot/build-cmake/Debug/hello_world.exe"
+    & "$PSScriptRoot/build-cmake/Debug/$executableName"
 }
 
 function Build-Manual {
@@ -18,18 +20,19 @@ function Build-Manual {
         "/Zi", # debug info
         "/std:c++17", # c++ standard
         "/Wall", # all the warnings
-        "/EHsc" # что-то про исключения
+        "/EHsc" # что-то про исключения     
     );
     $sourceFiles = @(
-        "$PSScriptRoot/hello_world.cpp",
-        "$PSScriptRoot/example.cpp"
+        "$PSScriptRoot/main.cpp"
     );
-    $outputFile = "$PSScriptRoot/build-manual/hello_world.exe";
+    $outputFile = "$PSScriptRoot/build-manual/$executableName";
+
+    Write-Output "cl.exe $flags $sourceFiles /Fe:$outputFile";
 
     & cl.exe $flags $sourceFiles "/Fe:$outputFile";
     Pop-Location;
 }
 
 function Run-Manual {
-    & "$PSScriptRoot/build-manual/hello_world.exe"
+    & "$PSScriptRoot/build-manual/$executableName"
 }
