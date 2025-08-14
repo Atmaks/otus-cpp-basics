@@ -2,3 +2,4 @@ build-manual/
 build-cmake/
 .vscode/
 .idea/
+.vs/
