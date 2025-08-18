@@ -8,7 +8,12 @@ function Build-Cmake {
 }
 
 function Run-Cmake {
-    & "$PSScriptRoot/build-cmake/Debug/$executableName"
+    Push-Location;
+    Set-Location "$PSScriptRoot/build-cmake/Debug/";
+
+    & "$PSScriptRoot/build-cmake/Debug/$executableName"  $args;
+
+    Pop-Location;
 }
 
 function Build-Manual {
