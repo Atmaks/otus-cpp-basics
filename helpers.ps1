@@ -20,7 +20,7 @@ function Build-Manual {
         "/Zi", # debug info
         "/std:c++17", # c++ standard
         "/Wall", # all the warnings
-        "/EHsc" # что-то про исключения     
+        "/EHsc" # что-то про исключения
     );
     $sourceFiles = @(
         "$PSScriptRoot/main.cpp"
@@ -34,5 +34,10 @@ function Build-Manual {
 }
 
 function Run-Manual {
-    & "$PSScriptRoot/build-manual/$executableName"
+    Push-Location;
+    Set-Location "$PSScriptRoot/build-manual";
+
+    & "$PSScriptRoot/build-manual/$executableName" $args;
+
+    Pop-Location;
 }

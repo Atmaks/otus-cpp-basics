@@ -12,20 +12,22 @@ struct ScoreboardEntry
 
 typedef std::vector<ScoreboardEntry> Scoreboard;
 
-int get_the_number();
+int read_max(int argumentCount, char **arguments);
+int get_the_number(int maxNumber);
 std::string read_name();
-int read_guess();
+int read_guess(int maxNumber);
 Scoreboard read_scoreboard();
 void record_attempt(Scoreboard &, std::string &, int);
 void write_scoreboard(Scoreboard &);
 
 constexpr auto MAX_INPUT_SIZE = std::numeric_limits<std::streamsize>::max();
 constexpr auto SCOREBOARD_FILENAME = "scoreboard.txt";
-constexpr auto MAX_NUMBER = 10;
+constexpr auto DEFAULT_MAX_NUMBER = 10;
 
-int main()
+int main(int argumentCount, char **arguments)
 {
-    int theNumber = get_the_number();
+    int maxNumber = read_max(argumentCount, arguments);
+    int theNumber = get_the_number(maxNumber);
     Scoreboard scoreboard = read_scoreboard();
     std::string name = read_name();
 
@@ -34,7 +36,7 @@ int main()
 
     while (true)
     {
-        guess = read_guess();
+        guess = read_guess(maxNumber);
         attempts += 1;
 
         if (guess > theNumber)
@@ -58,10 +60,35 @@ int main()
     write_scoreboard(scoreboard);
 }
 
-int get_the_number()
+int read_max(int argumentCount, char **arguments)
+{
+    if (argumentCount == 1) // executable name and terminator
+    {
+        return DEFAULT_MAX_NUMBER;
+    }
+
+    if (argumentCount != 3)
+    {
+        std::cout << "Wrong number of arguments: " << argumentCount << std::endl
+                  << "Usage: main.exe -max 42" << std::endl;
+        exit(1);
+    }
+
+    std::string firstArg = arguments[1];
+    if (firstArg != "-max")
+    {
+        std::cout << "Invalid argument." << std::endl
+                  << "Usage: main.exe -max 42" << std::endl;
+        exit(1);
+    }
+
+    return std::stoi(arguments[2]);
+}
+
+int get_the_number(int maxNumber)
 {
     std::srand(std::time(nullptr));
-    return std::rand() % MAX_NUMBER;
+    return std::rand() % maxNumber;
 }
 
 std::string read_name()
@@ -136,13 +163,13 @@ Scoreboard read_scoreboard()
     return scoreboard;
 }
 
-int read_guess()
+int read_guess(int maxNumber)
 {
     int guess = -1;
 
     while (true)
     {
-        std::cout << "Please enter an integer between 0 and " << MAX_NUMBER << std::endl;
+        std::cout << "Please enter an integer between 0 and " << maxNumber << std::endl;
 
         std::cin >> guess;
 
@@ -162,7 +189,7 @@ int read_guess()
 
         if (guess < 0 || guess > 100)
         {
-            std::cout << "Your guess must be between 0 and " << MAX_NUMBER << "!Try again." << std::endl;
+            std::cout << "Your guess must be between 0 and " << maxNumber << "!Try again." << std::endl;
             std::cin.ignore(MAX_INPUT_SIZE, '\n');
             continue;
         }
