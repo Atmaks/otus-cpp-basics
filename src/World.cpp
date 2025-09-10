@@ -24,25 +24,10 @@ World::World(const std::string& worldFilePath) {
      * многократно - хорошо бы вынести это в функцию
      * и не дублировать код...
      */
-    stream >> topLeft.x >> topLeft.y >> bottomRight.x >> bottomRight.y;
+    stream >> topLeft >> bottomRight;
     physics.setWorldBox(topLeft, bottomRight);
 
-    /**
-     * TODO: хорошее место для улучшения.
-     * (x, y) и (vx, vy) - составные части объекта, также
-     * как и (red, green, blue). Опять же, можно упростить
-     * этот код, научившись читать сразу Point, Color...
-     */
-    double x;
-    double y;
-    double vx;
-    double vy;
     double radius;
-
-    double red;
-    double green;
-    double blue;
-
     bool isCollidable;
 
     // Здесь не хватает обработки ошибок, но на текущем
@@ -50,28 +35,24 @@ World::World(const std::string& worldFilePath) {
     while (stream.peek(), stream.good()) {
         // Читаем координаты центра шара (x, y) и вектор
         // его скорости (vx, vy)
-        stream >> x >> y >> vx >> vy;
+        Point center, velocityVector;
+        stream >> center >> velocityVector;
+
         // Читаем три составляющие цвета шара
-        stream >> red >> green >> blue;
+        Color color;
+        stream >> color;
         // Читаем радиус шара
         stream >> radius;
         // Читаем свойство шара isCollidable, которое
         // указывает, требуется ли обрабатывать пересечение
         // шаров как столкновение. Если true - требуется.
-        // В базовой части задания этот параметр
+        // В базовой части задания этот параметр не используется.
         stream >> std::boolalpha >> isCollidable;
 
-        // TODO: место для доработки.
-        // Здесь не хватает самого главного - создания
-        // объекта класса Ball со свойствами, прочитанными
-        // выше, и его помещения в контейнер balls
-        Ball ball{Color{red, green, blue}, radius};
-        ball.setCenter(Point{x, y});
-        ball.setVelocity(Velocity{Point{vx, vy}});
+        Ball ball{color, radius};
+        ball.setCenter(center);
+        ball.setVelocity(Velocity{velocityVector});
 
-        // После того как мы каким-то образом
-        // сконструируем объект Ball ball;
-        // добавьте его в конец контейнера вызовом
         balls.push_back(ball);
     }
 }
