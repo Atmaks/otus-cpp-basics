@@ -1,8 +1,8 @@
 #include "Ball.hpp"
 #include <cmath>
 
-Ball::Ball(const Color& color_, const double radius_)
-    : color{color_}, radius{radius_} {}
+Ball::Ball(const Color& color_, const double radius_, bool isCollidable_)
+    : color{color_}, radius{radius_}, isCollidable{isCollidable_} {}
 
 /**
  * Задает скорость объекта
@@ -64,4 +64,8 @@ double Ball::getRadius() const {
  */
 double Ball::getMass() const {
     return M_PI * std::pow(this->radius, 3) * 4. / 3.;
+}
+
+bool Ball::getIsCollidable() const {
+    return this->isCollidable;
 }

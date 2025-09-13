@@ -49,7 +49,7 @@ World::World(const std::string& worldFilePath) {
         // В базовой части задания этот параметр не используется.
         stream >> std::boolalpha >> isCollidable;
 
-        Ball ball{color, radius};
+        Ball ball{color, radius, isCollidable};
         ball.setCenter(center);
         ball.setVelocity(Velocity{velocityVector});
 
@@ -61,7 +61,7 @@ World::World(const std::string& worldFilePath) {
 void World::show(Painter& painter) const {
     // Рисуем белый прямоугольник, отображающий границу
     // мира
-    painter.draw(topLeft, bottomRight, Color(0.5, 0.5, 0.5));
+    painter.draw(topLeft, bottomRight, Color(1, 1, 1));
 
     // Вызываем отрисовку каждого шара
     for (const Ball& ball : balls) {
