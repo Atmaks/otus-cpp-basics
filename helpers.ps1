@@ -6,7 +6,8 @@ function Build-Cmake {
 }
 
 function Run-Cmake {
-    & "$PSScriptRoot/build-cmake/Debug/hello_world.exe"
+    param ($fileName)
+    & "$PSScriptRoot/build-cmake/Debug/physics.exe" $fileName
 }
 
 function Build-Manual {
