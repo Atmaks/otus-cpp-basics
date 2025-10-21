@@ -6,30 +6,5 @@ function Build-Cmake {
 }
 
 function Run-Cmake {
-    & "$PSScriptRoot/build-cmake/Debug/hello_world.exe"
-}
-
-function Build-Manual {
-    Push-Location;
-    New-Item -Path "$PSScriptRoot/build-manual" -ItemType Directory -ErrorAction SilentlyContinue;
-    Set-Location "$PSScriptRoot/build-manual";
-
-    $flags = @(
-        "/Zi", # debug info
-        "/std:c++17", # c++ standard
-        "/Wall", # all the warnings
-        "/EHsc" # что-то про исключения
-    );
-    $sourceFiles = @(
-        "$PSScriptRoot/hello_world.cpp",
-        "$PSScriptRoot/example.cpp"
-    );
-    $outputFile = "$PSScriptRoot/build-manual/hello_world.exe";
-
-    & cl.exe $flags $sourceFiles "/Fe:$outputFile";
-    Pop-Location;
-}
-
-function Run-Manual {
-    & "$PSScriptRoot/build-manual/hello_world.exe"
+    & "$PSScriptRoot/build-cmake/Debug/statistics.exe" "$PSScriptRoot/input.txt"
 }
