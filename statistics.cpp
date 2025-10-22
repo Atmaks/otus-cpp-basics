@@ -2,6 +2,8 @@
 #include <fstream>
 #include <limits>
 #include <cmath>
+#include <vector>
+#include <string>
 
 class IStatistics
 {
@@ -140,6 +142,41 @@ private:
 	int count = 0;
 };
 
+class Percentile : public IStatistics
+{
+public:
+	Percentile(int percent) : percent{percent}
+	{
+	}
+
+	void update(double next) override
+	{
+		this->inputs.push_back(next);
+	}
+
+	double eval() const override
+	{
+		// нечаянно не поделить на ноль
+		if (this->inputs.size() == 0)
+		{
+			return 0;
+		}
+
+		double percentileRatio = this->percent / 100.0;
+		int nearestIndex = (int)(this->inputs.size() * percentileRatio);
+		return this->inputs[nearestIndex];
+	}
+
+	const char *name() const override
+	{
+		return "percentile (exclusive)";
+	}
+
+private:
+	int percent;
+	std::vector<double> inputs{};
+};
+
 int main(int argc, char **argv)
 {
 	if (argc != 2)
@@ -149,7 +186,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	const size_t statistics_count = 4;
+	const size_t statistics_count = 6;
 	IStatistics *statistics[statistics_count];
 	std::string inFileName(argv[1]);
 
@@ -157,6 +194,8 @@ int main(int argc, char **argv)
 	statistics[1] = new Max{};
 	statistics[2] = new Mean{};
 	statistics[3] = new StandardDeviation{};
+	statistics[4] = new Percentile{90};
+	statistics[5] = new Percentile{95};
 
 	double val = 0;
 
