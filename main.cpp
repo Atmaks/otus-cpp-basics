@@ -42,6 +42,9 @@ void demonstrateMyArray()
     myArray.push_back(30);
     myArray.print();
 
+    std::cout << "----- check that access at index actually compiles\n";
+    std::cout << "element at 5: " << myArray[5] << "\n";
+
     std::cout << "\n";
 }
 
@@ -86,6 +89,9 @@ void demonstrateMyLinkedList()
     std::cout << "----- append 30 at the end\n";
     myList.push_back(30);
     myList.print();
+
+    std::cout << "----- check that access at index actually compiles\n";
+    std::cout << "element at 5: " << myList[5] << "\n";
 
     std::cout << "\n";
 }
