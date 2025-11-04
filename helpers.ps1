@@ -17,7 +17,7 @@ function Build-Manual {
     $flags = @(
         "/Zi", # debug info
         "/std:c++17", # c++ standard
-        "/Wall", # all the warnings
+        "/W4", # all the warnings
         "/EHsc" # что-то про исключения
     );
     $sourceFiles = @(

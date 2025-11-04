@@ -64,7 +64,6 @@ public:
         {
             T *pointerAtPosition = this->storage + position;
             this->elementCount -= length;
-            std::cerr << "values are " << this->elementCount << " " << position << std::endl;
             std::memmove(pointerAtPosition, pointerAtPosition + length, (this->elementCount - position) * sizeof(T));
         }
     }
