@@ -18,18 +18,13 @@ public:
 class Min : public IStatistics
 {
 public:
-	Min() : m_min{std::numeric_limits<double>::min()}
+	Min() : m_min{std::numeric_limits<double>::max()}
 	{
 	}
 
 	void update(double next) override
 	{
-		if (!this->encounteredAtLeastOneNumber)
-		{
-			this->m_min = next;
-			this->encounteredAtLeastOneNumber = true;
-		}
-		else if (next < m_min)
+		if (next < m_min)
 		{
 			m_min = next;
 		}
@@ -47,24 +42,18 @@ public:
 
 private:
 	double m_min;
-	bool encounteredAtLeastOneNumber = false;
 };
 
 class Max : public IStatistics
 {
 public:
-	Max() : max{0}
+	Max() : max{std::numeric_limits<double>::lowest()}
 	{
 	}
 
 	void update(double next) override
 	{
-		if (!this->encounteredAtLeastOneNumber)
-		{
-			this->max = next;
-			this->encounteredAtLeastOneNumber = true;
-		}
-		else if (next > max)
+		if (next > max)
 		{
 			this->max = next;
 		}
@@ -82,7 +71,6 @@ public:
 
 private:
 	double max;
-	bool encounteredAtLeastOneNumber = false;
 };
 
 class Mean : public IStatistics
@@ -225,6 +213,8 @@ int main(int argc, char **argv)
 	for (size_t i = 0; i < statistics_count; ++i)
 	{
 		std::cout << statistics[i]->name() << " = " << statistics[i]->eval() << std::endl;
+		// delete right away
+		delete statistics[i];
 	}
 
 	return 0;
