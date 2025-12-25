@@ -45,6 +45,20 @@ void demonstrateMyArray()
     std::cout << "----- check that access at index actually compiles\n";
     std::cout << "element at 5: " << myArray[5] << "\n";
 
+    std::cout << "----- copy\n";
+    auto myOtherArray = myArray;
+    std::cout << "----- copied from:\n";
+    myArray.print();
+    std::cout << "----- copied to:\n";
+    myOtherArray.print();
+
+    std::cout << "----- move\n";
+    auto myAnotherArray = std::move(myArray);
+    std::cout << "----- moved from:\n";
+    myArray.print();
+    std::cout << "----- moved to:\n";
+    myAnotherArray.print();
+
     std::cout << "\n";
 }
 

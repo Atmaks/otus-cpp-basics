@@ -13,6 +13,35 @@ public:
         this->storage = new T[this->capacity];
     }
 
+    // copy constructor
+    MyArray(const MyArray<T> &other)
+    {
+        this->copyFrom(other);
+    }
+
+    // copy assignment
+    MyArray<T> &operator=(const MyArray<T> &other)
+    {
+        this->copyFrom(other);
+    }
+
+    // move constructor
+    MyArray(MyArray<T> &&other) noexcept
+    {
+        if (this != &other) {
+            this->moveFrom(std::move(other));
+        }
+    }
+
+    // move assignment
+    MyArray<T> &operator=(MyArray<T> &&other) noexcept
+    {
+        if (this != &other) {
+            this->moveFrom(std::move(other));
+        }
+        return this;
+    }
+
     void push_back(const T &value)
     {
         if (this->elementCount == this->capacity)
@@ -86,6 +115,12 @@ public:
 
     void print()
     {
+        if (this->storage == nullptr)
+        {
+            std::cout << "I've got moved, don't print me please!\n";
+            return;
+        }
+
         std::cout << "elements:";
 
         for (size_t i = 0; i < this->elementCount; i++)
@@ -101,7 +136,7 @@ public:
 
     ~MyArray()
     {
-        delete this->storage;
+        delete[] this->storage;
     }
 
 private:
@@ -111,11 +146,34 @@ private:
 
         T *newStorage = new T[this->capacity];
         std::memmove(newStorage, this->storage, this->elementCount * sizeof(T));
-        delete this->storage;
+        delete[] this->storage;
         this->storage = newStorage;
+    }
+
+    void copyFrom(const MyArray<T> &other)
+    {
+        if (this->storage != nullptr)
+        {
+            delete[] this->storage;
+        }
+
+        this->elementCount = other.elementCount;
+        this->capacity = other.capacity;
+
+        this->storage = new T[this->capacity];
+
+        std::copy(other.storage, other.storage + other.elementCount, this->storage);
+    }
+
+    void moveFrom(MyArray<T> &&other)
+    {
+        this->storage = other.storage;
+        this->elementCount = other.elementCount;
+        this->capacity = other.capacity;
+        other.storage = nullptr;
     }
 
     size_t elementCount = 0;
     size_t capacity = 10;
-    T *storage;
+    T *storage = nullptr;
 };
