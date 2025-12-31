@@ -107,6 +107,20 @@ void demonstrateMyLinkedList()
     std::cout << "----- check that access at index actually compiles\n";
     std::cout << "element at 5: " << myList[5] << "\n";
 
+    std::cout << "----- copy\n";
+    auto myOtherList = myList;
+    std::cout << "----- copied from:\n";
+    myList.print();
+    std::cout << "----- copied to:\n";
+    myOtherList.print();
+
+    std::cout << "----- move\n";
+    auto myAnotherList = std::move(myList);
+    std::cout << "----- moved from:\n";
+    myList.print();
+    std::cout << "----- moved to:\n";
+    myAnotherList.print();
+
     std::cout << "\n";
 }
 

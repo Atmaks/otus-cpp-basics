@@ -15,6 +15,39 @@ template <typename T>
 class MyLinkedList
 {
 public:
+    MyLinkedList()
+    {
+    }
+
+    // copy constructor
+    MyLinkedList(const MyLinkedList<T>& other)
+    {
+        this->copyFrom(other);
+    }
+
+    // copy assignment
+    MyLinkedList<T>& operator=(const MyLinkedList<T>& other)
+    {
+        this->copyFrom(other);
+    }
+
+    // move constructor
+    MyLinkedList(MyLinkedList<T>&& other) noexcept
+    {
+        if (this != &other) {
+            this->moveFrom(std::move(other));
+        }
+    }
+
+    // move assignment
+    MyLinkedList<T>& operator=(MyLinkedList<T>&& other) noexcept
+    {
+        if (this != &other) {
+            this->moveFrom(std::move(other));
+        }
+        return this;
+    }
+
     void push_back(const T &value)
     {
         if (this->head == nullptr)
@@ -144,12 +177,19 @@ public:
     {
         std::cout << "elements: ";
 
-        auto tmp = this->head;
-        while (tmp != nullptr)
-        {
-            std::cout << tmp->value << " ";
-            tmp = tmp->next;
+        if (this->head == nullptr) {
+            std::cout << "none";
         }
+        else {
+            auto tmp = this->head;
+            while (tmp != nullptr)
+            {
+                std::cout << tmp->value << " ";
+                tmp = tmp->next;
+            }
+        }
+
+      
         std::cout << std::endl;
 
         std::cout << "size: " << this->elementCount << std::endl;
@@ -157,12 +197,7 @@ public:
 
     ~MyLinkedList()
     {
-        while (this->head != nullptr)
-        {
-            auto tmp = this->head->next;
-            delete this->head;
-            this->head = tmp;
-        }
+        this->deleteData();
     }
 
 private:
@@ -178,6 +213,47 @@ private:
         }
 
         return theNode;
+    }
+
+    void copyFrom(const MyLinkedList<T>& other)
+    {
+        this->deleteData();
+
+        this->elementCount = other.elementCount;
+
+        ListNode<T>* otherCursor = other.head;
+        ListNode<T>** thisCursor = &this->head;
+
+        while (otherCursor != nullptr) {
+            *thisCursor = new ListNode<T>{ otherCursor->value, nullptr };
+            this->head = this->head == nullptr ? *thisCursor : this->head;
+            thisCursor = &((*thisCursor)->next);
+            otherCursor = otherCursor->next;
+        }
+    }
+
+    void moveFrom(MyLinkedList<T>&& other)
+    {
+        if (this == &other) {
+            return;
+        }
+
+        this->head = other.head;
+        this->elementCount = other.elementCount;
+
+        other.head = nullptr;
+        other.elementCount = 0;
+    }
+
+    void deleteData()
+    {
+        while (this->head != nullptr)
+        {
+            auto tmp = this->head->next;
+            delete this->head;
+            this->head = tmp;
+        }
+        this->head = nullptr;
     }
 
     size_t elementCount = 0;
