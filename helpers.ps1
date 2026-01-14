@@ -6,7 +6,7 @@ function Build-Cmake {
 }
 
 function Run-Cmake {
-    & "$PSScriptRoot/build-cmake/Debug/hello_world.exe"
+    & "$PSScriptRoot/build-cmake/Debug/containers.exe"
 }
 
 function Build-Manual {
@@ -17,19 +17,18 @@ function Build-Manual {
     $flags = @(
         "/Zi", # debug info
         "/std:c++17", # c++ standard
-        "/Wall", # all the warnings
+        "/W4", # all the warnings
         "/EHsc" # что-то про исключения
     );
     $sourceFiles = @(
-        "$PSScriptRoot/hello_world.cpp",
-        "$PSScriptRoot/example.cpp"
+        "$PSScriptRoot/main.cpp"
     );
-    $outputFile = "$PSScriptRoot/build-manual/hello_world.exe";
+    $outputFile = "$PSScriptRoot/build-manual/containers.exe";
 
     & cl.exe $flags $sourceFiles "/Fe:$outputFile";
     Pop-Location;
 }
 
 function Run-Manual {
-    & "$PSScriptRoot/build-manual/hello_world.exe"
+    & "$PSScriptRoot/build-manual/containers.exe"
 }
